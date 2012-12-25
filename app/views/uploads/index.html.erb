@@ -59,7 +59,7 @@
     <td class="preview"><span class="fade"></span></td>
     <td class="name"><span>{%=file.name%}</span></td>
     <td class="title"><label>Tag:
-      <select data-placeholder="Choose a Country" id="test" class="chzn-select" style="width:350px;" multiple tabindex="3" name="title[]" required>
+      <select data-placeholder="Choose a Country" class="chzn-select" style="width:350px;" multiple tabindex="3" name="title[]" required>
         <option value="United States">United States</option>
         <option value="United Kingdom">United Kingdom</option>
         <option value="Afghanistan">Afghanistan</option>
@@ -100,7 +100,7 @@
 <!-- The template to display files available for download -->
 <script id="template-download" type="text/x-tmpl">
   {% for (var i=0, file; file=o.files[i]; i++) { %}
-    <tr class="template-download fade">
+  <tr class="template-download fade" id="{%= file.id %}">
       {% if (file.error) { %}
         <td></td>
         <td class="name"><span>{%=file.name%}</span></td>
@@ -136,9 +136,20 @@
         var targetName =  event.target.nodeName.toString().trim() ;
         //alert (targetName);
         if (targetName == "TR") {
-            $("#test").chosen();
-            alert('ha cambiato - Event Node Name:' + event.target.nodeName)
+            $(".chzn-select").chosen();
+            //alert('ha cambiato - Event Node Name:' + event.target.nodeName)
         }
+    });
+
+    $(window).load(function() {
+        $("#listenMe tbody").sortable({
+            update: function(event, ui){
+                var itm_arr = $("#listenMe tbody").sortable('toArray');
+                //alert(itm_arr)
+                var pobj = {uploads: itm_arr};
+                $.post("/uploads/reorder", pobj);
+            }
+        });
     });
 
 
@@ -159,6 +170,16 @@
           template[0].offsetWidth;
         template.addClass('in');
         $('#loading').remove();
+      });
+
+      $('#fileupload').bind('fileuploadsubmit', function (e, data) {
+          var inputs = data.context.find(':input');
+          if (inputs.filter('[required][value=""]').first().focus().length) {
+              return false;
+          }
+          //alert(inputs.filter('[required]').first().val());
+          data.formData = inputs.serializeArray();
+          //alert(data.formData);
       });
 
   });

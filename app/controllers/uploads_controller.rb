@@ -99,4 +99,27 @@ class UploadsController < ApplicationController
       format.json { head :no_content }
     end
   end
+
+
+  def reorder
+    @uids = params[:uploads]
+    n = 1
+
+    @uids.each do |id|
+      upload = Upload.find(id)
+      upload.update_attribute(:position, n)
+      n += 1
+    end
+
+    #ActiveRecord::Base.transaction do
+    # @uids.each do |id|
+    #  upload = Upload.find(id)
+    # upload.position = n
+    #n += 1
+    #upload.save
+    #end
+    #end
+  end
+
+
 end

@@ -15,3 +15,4 @@
 //= require jquery-fileupload
 //= require_tree .
 //= require chosen-jquery
+//= require jquery-ui-1.9.2.custom
