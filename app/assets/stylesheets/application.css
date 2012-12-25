@@ -11,4 +11,5 @@
  *= require_self
  *= require jquery.fileupload-ui
  *= require_tree .
+ *= require chosen
  */

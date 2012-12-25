@@ -2,7 +2,8 @@ class UploadsController < ApplicationController
   # GET /uploads
   # GET /uploads.json
   def index
-    @uploads = Upload.all
+    #@uploads = Upload.find(:all, :order => 'position ASC')
+    @uploads = Upload.all.sort_by &:position
 
     respond_to do |format|
       format.html # index.html.erb
@@ -41,6 +42,20 @@ class UploadsController < ApplicationController
   # POST /uploads.json
   def create
     @upload = Upload.new(params[:upload])
+
+    @position = if Upload.all(:select => :position).collect(&:position).max
+      Upload.all(:select => :position).collect(&:position).max
+    else
+      0
+    end
+
+    @position += 1
+    @upload.position = @position
+
+    params[:title].each do |t|
+      @tag = Tag.find_or_create_by_content(:content => t)
+      @upload.tags << @tag if !@upload.tags.include?(t)
+    end
 
     respond_to do |format|
       if @upload.save

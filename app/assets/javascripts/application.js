@@ -14,3 +14,4 @@
 //= require jquery_ujs
 //= require jquery-fileupload
 //= require_tree .
+//= require chosen-jquery
