@@ -1,8 +1,17 @@
 class Upload < ActiveRecord::Base
-  attr_accessible :upload
-  has_attached_file :upload
+  attr_accessible :upload, :position
+  has_attached_file :upload,  :styles => {
+      :thumb => ["150x172#",:jpg],
+      :large => ["100%", :jpg]
+  }
 
   include Rails.application.routes.url_helpers
+
+  has_many :descriptions
+  has_many :tags, :through => :descriptions
+
+  validates_attachment :upload, :presence => true,
+                       :size => { :in => 0..2000.kilobytes }
 
   def to_jq_upload
     {

@@ -11,7 +11,20 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120731045929) do
+ActiveRecord::Schema.define(:version => 20121225081424) do
+
+  create_table "descriptions", :force => true do |t|
+    t.integer  "tag_id"
+    t.integer  "upload_id"
+    t.datetime "created_at", :null => false
+    t.datetime "updated_at", :null => false
+  end
+
+  create_table "tags", :force => true do |t|
+    t.string   "content"
+    t.datetime "created_at", :null => false
+    t.datetime "updated_at", :null => false
+  end
 
   create_table "uploads", :force => true do |t|
     t.string   "upload_file_name"
@@ -20,6 +33,7 @@ ActiveRecord::Schema.define(:version => 20120731045929) do
     t.datetime "upload_updated_at"
     t.datetime "created_at",          :null => false
     t.datetime "updated_at",          :null => false
+    t.integer  "position"
   end
 
 end
